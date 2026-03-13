@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Nova Unidade</title>
+</head>
+<body>
+
+    <h1>Nova Unidade</h1>
+
+    <form th:action="@{/unidades/salvar}" th:object="${unidade}" method="post">
+        <label>Nome:</label>
+        <input type="text" th:field="*{nome}" />
+        <button type="submit">Salvar</button>
+    </form>
+
+    <a href="/unidades">Voltar</a>
+
+</body>
+</html>

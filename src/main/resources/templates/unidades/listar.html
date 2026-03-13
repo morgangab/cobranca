@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Unidades</title>
+</head>
+<body>
+
+    <h1>Unidades</h1>
+
+    <a href="/unidades/nova">Nova Unidade</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="unidade : ${unidades}">
+                <td th:text="${unidade.nome}"></td>
+                <td>
+                    <a th:href="@{/unidades/deletar/{id}(id=${unidade.id})}">Deletar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>
