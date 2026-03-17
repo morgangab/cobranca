@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizar Cliente</title>
+</head>
+<body>
+
+    <h1>Dados do Cliente</h1>
+
+    <p><strong>Nome:</strong> <span th:text="${cliente.nomeResponsavel}"></span></p>
+    <p><strong>CPF:</strong> <span id="cpf" th:text="${cliente.cpf}"></span></p>
+    <p><strong>Telefone:</strong> <span id="telefone" th:text="${cliente.telefone}"></span></p>
+    <p><strong>Endereço:</strong> <span th:text="${cliente.endereco}"></span></p>
+    <p><strong>Contrato:</strong> <span th:text="${cliente.numeroContrato}"></span></p>
+    <p><strong>Unidade:</strong> <span th:text="${cliente.unidade.nome}"></span></p>
+
+    <a th:href="@{/clientes/editar/{id}(id=${cliente.id})}">Editar</a>
+    <a href="/clientes">Voltar</a>
+
+    <script>
+        function formatarCpf(v) {
+            return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+
+        function formatarTelefone(v) {
+            if (v.length === 11) {
+                return v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            return v.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        }
+
+        document.getElementById('cpf').textContent = formatarCpf(document.getElementById('cpf').textContent);
+        document.getElementById('telefone').textContent = formatarTelefone(document.getElementById('telefone').textContent);
+    </script>
+
+</body>
+</html>

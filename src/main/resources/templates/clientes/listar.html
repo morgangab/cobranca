@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Clientes</title>
+</head>
+<body>
+
+    <h1>Clientes</h1>
+
+    <form action="/clientes/buscar" method="get">
+        <input type="text" name="cpf" placeholder="Buscar por CPF" />
+        <button type="submit">Buscar</button>
+    </form>
+
+    <a href="/clientes/novo">Novo Cliente</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Nome</th>
+                <th>CPF</th>
+                <th>Telefone</th>
+                <th>Contrato</th>
+                <th>Unidade</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="cliente : ${clientes}">
+                <td th:text="${cliente.nomeResponsavel}"></td>
+                <td class="cpf" th:text="${cliente.cpf}"></td>
+                <td class="telefone" th:text="${cliente.telefone}"></td>
+                <td th:text="${cliente.numeroContrato}"></td>
+                <td th:text="${cliente.unidade.nome}"></td>
+                <td>
+                    <a th:href="@{/clientes/visualizar/{id}(id=${cliente.id})}">Visualizar</a>
+                    <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}">Deletar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script>
+        function formatarCpf(v) {
+            return v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+
+        function formatarTelefone(v) {
+            if (v.length === 11) {
+                return v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            }
+            return v.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+        }
+
+        document.querySelectorAll('.cpf').forEach(el => {
+            el.textContent = formatarCpf(el.textContent.trim());
+        });
+
+        document.querySelectorAll('.telefone').forEach(el => {
+            el.textContent = formatarTelefone(el.textContent.trim());
+        });
+    </script>
+
+</body>
+</html>

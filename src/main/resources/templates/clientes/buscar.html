@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Buscar Cliente</title>
+</head>
+<body>
+
+    <h1>Resultado da Busca</h1>
+
+    <div th:if="${cliente != null}">
+        <p><strong>Nome:</strong> <span th:text="${cliente.nomeResponsavel}"></span></p>
+        <p><strong>CPF:</strong> <span th:text="${cliente.cpf}"></span></p>
+        <p><strong>Telefone:</strong> <span th:text="${cliente.telefone}"></span></p>
+        <p><strong>Endereço:</strong> <span th:text="${cliente.endereco}"></span></p>
+        <p><strong>Contrato:</strong> <span th:text="${cliente.numeroContrato}"></span></p>
+        <p><strong>Unidade:</strong> <span th:text="${cliente.unidade.nome}"></span></p>
+    </div>
+
+    <div th:if="${cliente == null}">
+        <p>Nenhum cliente encontrado com esse CPF.</p>
+        <a href="/clientes/novo">Cadastrar novo cliente</a>
+    </div>
+
+    <a href="/clientes">Voltar</a>
+
+</body>
+</html>
