@@ -7,6 +7,6 @@ import com.gestao.cobranca.model.Acordo;
 
 public interface ParcelaRepository extends JpaRepository<Parcela, Long> {
 
-    List<Parcela> findByAcordo(Acordo acordo);
+    List<Parcela> findByAcordoOrderByDataVencimentoAsc(Acordo acordo);
 
 }

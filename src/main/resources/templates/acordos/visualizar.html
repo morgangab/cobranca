@@ -46,7 +46,11 @@
     <div th:if="${#lists.isEmpty(parcelas)}">
         <p>Nenhuma parcela cadastrada ainda.</p>
     </div>
-
+	
+	<form th:action="@{/acordos/cancelar/{id}(id=${acordo.id})}" method="post">
+	    <button type="submit" onclick="return confirm('Tem certeza que deseja cancelar este acordo?')">Cancelar Acordo</button>
+	</form>
+	<a th:href="@{/acordos/editar/{id}(id=${acordo.id})}">Editar Acordo</a>
     <a href="/acordos">Voltar</a>
 
     <script>

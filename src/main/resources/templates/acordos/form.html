@@ -29,13 +29,8 @@
             </select>
 
             <label>Forma de Pagamento:</label>
-            <select th:field="*{formaPagamento}">
+            <select th:field="*{formaPagamento}" id="formaPagamento">
                 <option th:each="forma : ${formasPagamento}" th:value="${forma}" th:text="${forma}"></option>
-            </select>
-
-            <label>Status:</label>
-            <select th:field="*{statusGeral}">
-                <option th:each="status : ${statusList}" th:value="${status}" th:text="${status}"></option>
             </select>
 
             <h3>Entrada</h3>
@@ -45,18 +40,21 @@
             <label>Data de Vencimento da Entrada:</label>
             <input type="date" th:field="*{dataVencimentoEntrada}" />
 
-            <h3>Parcelas</h3>
-            <label>Número de Parcelas:</label>
-            <input type="number" min="0" th:field="*{numeroParcelas}" />
+            
+			<div id="campoParcelas">
+				<h3>Parcelas</h3>
+			    <label>Número de Parcelas:</label>
+			    <input type="number" min="0" th:field="*{numeroParcelas}" />
 
-            <label>Valor de cada Parcela (R$):</label>
-            <input type="number" step="0.01" th:field="*{valorParcela}" />
+			    <label>Valor de cada Parcela (R$):</label>
+			    <input type="number" step="0.01" th:field="*{valorParcela}" />
 
-			<label>Data de Vencimento da 1ª Parcela:</label>
-			<input type="date" id="dataVencimentoPrimeiraParcela" th:field="*{dataVencimentoPrimeiraParcela}" />
-			<small id="avisoData" style="color: orange; display: none;">
-			    Atenção: sem a data de vencimento as parcelas não serão salvas!
-			</small>
+			    <label>Data de Vencimento da 1ª Parcela:</label>
+			    <input type="date" id="dataVencimentoPrimeiraParcela" th:field="*{dataVencimentoPrimeiraParcela}" />
+			    <small id="avisoData" style="color: orange; display: none;">
+			        Atenção: sem a data de vencimento as parcelas não serão salvas!
+			    </small>
+			</div>
 
             <h3>Observações</h3>
             <textarea th:field="*{observacoes}" rows="3" cols="50" placeholder="Ex: Parcelas 3, 4 e 5 do contrato 2023"></textarea>
@@ -73,6 +71,21 @@
     <a href="/acordos">Voltar</a>
 
     <script>
+		const formaPagamento = document.getElementById('formaPagamento');
+		const campoParcelas = document.getElementById('campoParcelas');
+
+		function toggleParcelas() {
+		    if (formaPagamento && formaPagamento.value === 'A_VISTA') {
+		        campoParcelas.style.display = 'none';
+		    } else {
+		        campoParcelas.style.display = 'block';
+		    }
+		}
+
+		if (formaPagamento) {
+		    formaPagamento.addEventListener('change', toggleParcelas);
+		    toggleParcelas();
+		}
         function mascaraCpf(valor) {
             return valor
                 .replace(/\D/g, '')

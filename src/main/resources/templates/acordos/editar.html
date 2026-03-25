@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Editar Acordo</title>
+</head>
+<body>
+
+    <h1>Editar Acordo</h1>
+
+    <h2>Dados do Cliente</h2>
+    <p><strong>Nome:</strong> <span th:text="${acordo.cliente.nomeResponsavel}"></span></p>
+    <p><strong>Unidade:</strong> <span th:text="${acordo.cliente.unidade != null ? acordo.cliente.unidade.nome : 'Sem unidade'}"></span></p>
+
+    <form th:action="@{/acordos/editar/salvar}" method="post">
+        <input type="hidden" name="id" th:value="${acordo.id}" />
+
+        <h2>Dados do Acordo</h2>
+
+        <label>Tipo:</label>
+        <select name="tipo">
+            <option th:each="tipo : ${tipos}"
+                    th:value="${tipo}"
+                    th:text="${tipo}"
+                    th:selected="${tipo == acordo.tipo}">
+            </option>
+        </select>
+
+        <label>Forma de Pagamento:</label>
+        <select name="formaPagamento">
+            <option th:each="forma : ${formasPagamento}"
+                    th:value="${forma}"
+                    th:text="${forma}"
+                    th:selected="${forma == acordo.formaPagamento}">
+            </option>
+        </select>
+
+        <h2>Parcelas</h2>
+        <table id="tabelaParcelas">
+            <thead>
+                <tr>
+                    <th>Parcela</th>
+                    <th>Valor (R$)</th>
+                    <th>Vencimento</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody id="corpoTabela">
+                <tr th:each="parcela : ${parcelas}">
+                    <td th:text="${parcela.numeroParcela}"></td>
+                    <td>
+                        <input type="hidden" name="parcelaIds" th:value="${parcela.id}" />
+                        <input type="number" step="0.01" name="parcelaValores" th:value="${parcela.valor}" />
+                    </td>
+                    <td>
+                        <input type="date" name="parcelaVencimentos" th:value="${parcela.dataVencimento}" />
+                    </td>
+                    <td>
+                        <select name="parcelaStatus">
+                            <option th:each="status : ${statusParcela}"
+                                    th:value="${status}"
+                                    th:text="${status}"
+                                    th:selected="${status == parcela.status}">
+                            </option>
+                        </select>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        <button type="button" onclick="adicionarParcela()">+ Adicionar Parcela</button>
+
+        <h2>Observações</h2>
+        <textarea name="observacoes" rows="3" cols="50" th:text="${acordo.observacoes}"></textarea>
+
+        <br/><br/>
+        <button type="submit">Salvar Alterações</button>
+    </form>
+
+    <a th:href="@{/acordos/visualizar/{id}(id=${acordo.id})}">Voltar</a>
+
+    <script th:inline="javascript">
+        const statusOpcoes = /*[[${statusParcela}]]*/ [];
+        let proximaParcela = /*[[${#lists.size(parcelas) + 1}]]*/ 1;
+
+        function adicionarParcela() {
+            const tbody = document.getElementById('corpoTabela');
+            const tr = document.createElement('tr');
+
+            let opcoesHtml = statusOpcoes.map(s => `<option value="${s}">${s}</option>`).join('');
+
+            tr.innerHTML = `
+                <td>${proximaParcela}</td>
+                <td>
+                    <input type="hidden" name="parcelaIds" value="0" />
+                    <input type="number" step="0.01" name="parcelaValores" value="" />
+                </td>
+                <td>
+                    <input type="date" name="parcelaVencimentos" value="" />
+                </td>
+                <td>
+                    <select name="parcelaStatus">${opcoesHtml}</select>
+                </td>
+            `;
+
+            tbody.appendChild(tr);
+            proximaParcela++;
+        }
+    </script>
+
+</body>
+</html>
