@@ -44,7 +44,13 @@ public class ClienteController {
     }
 
     @PostMapping("/salvar")
-    public String salvar(Cliente cliente) {
+    public String salvar(Cliente cliente, @RequestParam(required = false) Long unidadeId, Model model) {
+        if (unidadeId == null) {
+            model.addAttribute("erro", "Selecione uma unidade para o cliente.");
+            model.addAttribute("unidades", unidadeService.listarTodas());
+            return "clientes/form";
+        }
+        cliente.setUnidade(unidadeService.buscarPorId(unidadeId));
         clienteService.salvar(cliente);
         return "redirect:/clientes";
     }

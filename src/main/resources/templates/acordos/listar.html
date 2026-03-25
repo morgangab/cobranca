@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Acordos</title>
+</head>
+<body>
+
+    <h1>Acordos</h1>
+
+    <a href="/acordos/novo">Novo Acordo</a>
+
+    <table>
+        <thead>
+            <tr>
+                <th>Cliente</th>
+                <th>Unidade</th>
+                <th>Tipo</th>
+                <th>Forma de Pagamento</th>
+                <th>Observações</th>
+                <th>Parcelas</th>
+                <th>Valor por Parcela</th>
+                <th>Status</th>
+                <th>Ações</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="acordo : ${acordos}">
+                <td th:text="${acordo.cliente.nomeResponsavel}"></td>
+                <td th:text="${acordo.cliente.unidade != null ? acordo.cliente.unidade.nome : 'Sem unidade'}"></td>
+                <td th:text="${acordo.tipo}"></td>
+                <td th:text="${acordo.formaPagamento}"></td>
+                <td th:text="${acordo.observacoes}"></td>
+                <td th:text="${acordo.numeroParcelas}"></td>
+                <td th:text="${acordo.valorParcela}"></td>
+                <td th:text="${acordo.statusGeral}"></td>
+                <td>
+                    <a th:href="@{/acordos/visualizar/{id}(id=${acordo.id})}">Visualizar</a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+</body>
+</html>

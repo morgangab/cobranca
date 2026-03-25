@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Novo Acordo</title>
+</head>
+<body>
+
+    <h1>Novo Acordo</h1>
+
+    <form action="/acordos/buscarCliente" method="get">
+        <label>Buscar cliente pelo CPF:</label>
+        <input type="text" id="cpfBusca" name="cpf" maxlength="14" placeholder="000.000.000-00" />
+        <button type="submit">Buscar</button>
+    </form>
+
+    <div th:if="${cliente != null}">
+        <h2>Cliente encontrado</h2>
+        <p><strong>Nome:</strong> <span th:text="${cliente.nomeResponsavel}"></span></p>
+        <p><strong>CPF:</strong> <span id="cpfCliente" th:text="${cliente.cpf}"></span></p>
+        <p><strong>Unidade:</strong> <span th:text="${cliente.unidade != null ? cliente.unidade.nome : 'Sem unidade'}"></span></p>
+
+        <form th:action="@{/acordos/salvar}" th:object="${acordo}" method="post">
+            <input type="hidden" name="clienteId" th:value="${cliente.id}" />
+
+            <label>Tipo:</label>
+            <select th:field="*{tipo}">
+                <option th:each="tipo : ${tipos}" th:value="${tipo}" th:text="${tipo}"></option>
+            </select>
+
+            <label>Forma de Pagamento:</label>
+            <select th:field="*{formaPagamento}">
+                <option th:each="forma : ${formasPagamento}" th:value="${forma}" th:text="${forma}"></option>
+            </select>
+
+            <label>Status:</label>
+            <select th:field="*{statusGeral}">
+                <option th:each="status : ${statusList}" th:value="${status}" th:text="${status}"></option>
+            </select>
+
+            <h3>Entrada</h3>
+            <label>Valor da Entrada (R$):</label>
+            <input type="number" step="0.01" th:field="*{valorEntrada}" placeholder="Deixe vazio se não houver entrada" />
+
+            <label>Data de Vencimento da Entrada:</label>
+            <input type="date" th:field="*{dataVencimentoEntrada}" />
+
+            <h3>Parcelas</h3>
+            <label>Número de Parcelas:</label>
+            <input type="number" min="0" th:field="*{numeroParcelas}" />
+
+            <label>Valor de cada Parcela (R$):</label>
+            <input type="number" step="0.01" th:field="*{valorParcela}" />
+
+			<label>Data de Vencimento da 1ª Parcela:</label>
+			<input type="date" id="dataVencimentoPrimeiraParcela" th:field="*{dataVencimentoPrimeiraParcela}" />
+			<small id="avisoData" style="color: orange; display: none;">
+			    Atenção: sem a data de vencimento as parcelas não serão salvas!
+			</small>
+
+            <h3>Observações</h3>
+            <textarea th:field="*{observacoes}" rows="3" cols="50" placeholder="Ex: Parcelas 3, 4 e 5 do contrato 2023"></textarea>
+
+            <button type="submit">Salvar Acordo</button>
+        </form>
+    </div>
+
+    <div th:if="${clienteNaoEncontrado}">
+        <p>Nenhum cliente encontrado com esse CPF.</p>
+        <a href="/clientes/novo">Cadastrar novo cliente</a>
+    </div>
+
+    <a href="/acordos">Voltar</a>
+
+    <script>
+        function mascaraCpf(valor) {
+            return valor
+                .replace(/\D/g, '')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d)/, '$1.$2')
+                .replace(/(\d{3})(\d{1,2})/, '$1-$2')
+                .replace(/(-\d{2})\d+?$/, '$1');
+        }
+
+        document.getElementById('cpfBusca').addEventListener('input', function() {
+            this.value = mascaraCpf(this.value);
+        });
+
+        const cpfCliente = document.getElementById('cpfCliente');
+        if (cpfCliente) {
+            const v = cpfCliente.textContent.trim();
+            cpfCliente.textContent = v.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        }
+		const numeroParcelas = document.querySelector('[name="numeroParcelas"]');
+		const dataVencimento = document.getElementById('dataVencimentoPrimeiraParcela');
+		const avisoData = document.getElementById('avisoData');
+
+		function verificarAviso() {
+		    if (numeroParcelas && numeroParcelas.value > 0 && dataVencimento && !dataVencimento.value) {
+		        avisoData.style.display = 'block';
+		    } else {
+		        avisoData.style.display = 'none';
+		    }
+		}
+
+		if (numeroParcelas) numeroParcelas.addEventListener('input', verificarAviso);
+		if (dataVencimento) dataVencimento.addEventListener('change', verificarAviso);
+    </script>
+
+</body>
+</html>

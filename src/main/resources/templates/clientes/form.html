@@ -27,13 +27,14 @@
         <label>Número do Contrato:</label>
         <input type="text" th:field="*{numeroContrato}" />
 
-        <label>Unidade:</label>
-        <select th:field="*{unidade}">
-            <option th:each="unidade : ${unidades}"
-                    th:value="${unidade.id}"
-                    th:text="${unidade.nome}">
-            </option>
-        </select>
+		<p th:if="${erro}" th:text="${erro}" style="color: red;"></p>
+		<label>Unidade:</label>
+		<select name="unidadeId">
+		    <option th:each="unidade : ${unidades}"
+		            th:value="${unidade.id}"
+		            th:text="${unidade.nome}">
+		    </option>
+		</select>
 
         <button type="submit">Salvar</button>
     </form>

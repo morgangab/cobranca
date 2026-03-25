@@ -32,7 +32,7 @@
                 <td class="cpf" th:text="${cliente.cpf}"></td>
                 <td class="telefone" th:text="${cliente.telefone}"></td>
                 <td th:text="${cliente.numeroContrato}"></td>
-                <td th:text="${cliente.unidade.nome}"></td>
+                <td th:text="${cliente.unidade != null ? cliente.unidade.nome : 'Sem unidade'}"></td>
                 <td>
                     <a th:href="@{/clientes/visualizar/{id}(id=${cliente.id})}">Visualizar</a>
                     <a th:href="@{/clientes/deletar/{id}(id=${cliente.id})}">Deletar</a>

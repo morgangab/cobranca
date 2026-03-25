@@ -18,6 +18,10 @@ public class UnidadeService {
         return unidadeRepository.findAll();
     }
 
+    public Unidade buscarPorId(Long id) {
+        return unidadeRepository.findById(id).orElse(null);
+    }
+
     public void salvar(Unidade unidade) {
         unidadeRepository.save(unidade);
     }

@@ -19,7 +19,8 @@ public class ClienteService {
     }
 
     public Cliente buscarPorCpf(String cpf) {
-        return clienteRepository.findByCpf(cpf);
+        String cpfLimpo = cpf.replaceAll("[^0-9]", "");
+        return clienteRepository.findByCpf(cpfLimpo);
     }
 
     public Cliente buscarPorId(Long id) {

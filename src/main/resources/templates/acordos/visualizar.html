@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Visualizar Acordo</title>
+</head>
+<body>
+
+    <h1>Acordo</h1>
+
+    <h2>Dados do Cliente</h2>
+    <p><strong>Nome:</strong> <span th:text="${acordo.cliente.nomeResponsavel}"></span></p>
+    <p><strong>CPF:</strong> <span id="cpf" th:text="${acordo.cliente.cpf}"></span></p>
+    <p><strong>Telefone:</strong> <span id="telefone" th:text="${acordo.cliente.telefone}"></span></p>
+    <p><strong>Unidade:</strong> <span th:text="${acordo.cliente.unidade != null ? acordo.cliente.unidade.nome : 'Sem unidade'}"></span></p>
+    <p><strong>Contrato:</strong> <span th:text="${acordo.cliente.numeroContrato}"></span></p>
+
+    <h2>Dados do Acordo</h2>
+    <p><strong>Tipo:</strong> <span th:text="${acordo.tipo}"></span></p>
+    <p><strong>Forma de Pagamento:</strong> <span th:text="${acordo.formaPagamento}"></span></p>
+	<p><strong>Observações:</strong> <span th:text="${acordo.observacoes}"></span></p>
+    <p><strong>Número de Parcelas:</strong> <span th:text="${acordo.numeroParcelas}"></span></p>
+    <p><strong>Valor por Parcela:</strong> <span th:text="${acordo.valorParcela}"></span></p>
+    <p><strong>Status:</strong> <span th:text="${acordo.statusGeral}"></span></p>
+
+    <h2>Parcelas</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Parcela</th>
+                <th>Valor</th>
+                <th>Vencimento</th>
+                <th>Status</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="parcela : ${parcelas}">
+                <td th:text="${parcela.numeroParcela}"></td>
+                <td th:text="${parcela.valor}"></td>
+                <td th:text="${parcela.dataVencimento}"></td>
+                <td th:text="${parcela.status}"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div th:if="${#lists.isEmpty(parcelas)}">
+        <p>Nenhuma parcela cadastrada ainda.</p>
+    </div>
+
+    <a href="/acordos">Voltar</a>
+
+    <script>
+        const cpf = document.getElementById('cpf');
+        const telefone = document.getElementById('telefone');
+
+        if (cpf) cpf.textContent = cpf.textContent.replace(/(\d{3})(\d{3})(\d{3})(\d{2})/, '$1.$2.$3-$4');
+        if (telefone) {
+            const v = telefone.textContent;
+            if (v.length === 11) {
+                telefone.textContent = v.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+            } else {
+                telefone.textContent = v.replace(/(\d{2})(\d{4})(\d{4})/, '($1) $2-$3');
+            }
+        }
+    </script>
+
+</body>
+</html>
